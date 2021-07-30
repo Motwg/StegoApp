@@ -1,0 +1,230 @@
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="modal-div" class="modal">
+    <span class="close" onclick="closeModal('modal-div')">&times;</span>
+    <img class="modal-content" id="modal-img" src="">
+</div>
+
+<div class="container-fluid section">
+    <div class="row">
+        <div class="col-md-12">
+            <!--FIRST ROW-->
+            <div class="row">
+                <!--Image-->
+                <div class="col-md-5 container-border padding-15">
+                    <img id="upImg" class="img-left" src="{{ image }}" alt="Uploaded Image"
+                         onclick="openModal(this)"/>
+                    <form id="form-upload" class="image-upload centered lab-xs-mar">
+                        <label for="upload-image">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                                 class="bi bi-upload" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
+                            </svg>
+                        </label>
+                        <input id="upload-image" type='file' name='uploaded-image'
+                               accept="image/png, image/jpeg"/>
+                    </form>
+
+                    <span class="lab-settings">Watermark</span>
+                    <textarea id="wmText" form="embedding" name="watermark"
+                              style="display:block;resize: none;"
+                              rows="4" cols="50"
+                              placeholder="Type your watermark here"></textarea>
+                </div>
+                <!--Embedding button-->
+                <div class="col-md-2">
+
+                    <form id="embedding" enctype="multipart/form-data">
+                        <span class="lab-settings">Algorithm</span>
+                        <select id='x' name="algorithm" class="form-select form-select-sm badge-lg"
+                                aria-label="Algorithm">
+                            {% for key, value in settings['algorithm'].items() %}
+                            <option value="{{key}}">{{value}}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="centered lab-xs-mar">
+                            <button id="btn-embed" type="submit" class="btn btn-primary btn-center">Embedding</button>
+                            <div class="arrow">
+                                <div class="line-left"></div>
+                                <div class="point-right"></div>
+                            </div>
+                        </div>
+                        <div class="space"></div>
+                        <div class="container-border">
+                            <div>
+                                <span class="lab-settings">Channel</span>
+                                <select name="channel" class="form-select form-select-sm badge-lg" aria-label="Channel">
+                                    {% for key, value in settings['channel'].items() %}
+                                    {% if key == 'b' %}
+                                    <option value="{{key}}" selected>{{value}}</option>
+                                    {% else %}
+                                    <option value="{{key}}">{{value}}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div style="display:none;">
+                                <span class="lab-settings">Delta - Quantization step</span>
+                                <input id="sl-delta" name="delta" type="range" min="5" max="9" value="5"
+                                       onchange="slideDelta(this, 'lab-delta')">
+                                <label id="lab-delta">Current value: 5</label>
+                            </div>
+                            <div style="display:none;">
+                                <span class="lab-settings">Alpha - Distortion compensation</span>
+                                <input id="sl-alpha" name="alpha" type="range" min="0.7" max="0.95" value="0.95"
+                                       step="0.05"
+                                       onchange="slideDelta(this, 'lab-alpha')">
+                                <label id="lab-alpha">Current value: 0.95</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!--Embed-->
+                <div class="col-md-5 container-border padding-15">
+                    <img id="embImg" src="{{ embed }}" alt="Embedded Image"
+                         onclick="openModal(this)"/>
+                    <div class="image-download centered lab-xs-mar">
+                        <a id=download-file href="{{ embed }}" download="image.png">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                                 class="bi bi-upload" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            <!--FIRST ROW END-->
+
+            <!--MIDDLE-->
+            <div class="row">
+                <div class="col-md-5">
+                </div>
+
+                <div class="col-md-2">
+                </div>
+
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-6">
+                            <form id="modification" enctype="multipart/form-data">
+                                <span class="lab-settings">Type of attack</span>
+                                <select name="modification" class="form-select form-select-sm badge-lg"
+                                        aria-label="modification">
+                                    {% for key, value in settings['attack'].items() %}
+                                    <option value="{{key}}">{{value}}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="centered lab-xs-mar">
+                                    <button id="btn-mod" type="submit" class="btn btn-primary btn-center">Perform attack
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-2">
+                            <div class='arrow-v' style='margin-left:auto;margin-right:15px;'></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="space"></div>
+            <!--MIDDLE END-->
+
+            <!--SECOND ROW-->
+            <div class="row">
+                <!--Watermark-->
+                <div class="col-md-5">
+                    <textarea id="ext-watermark" name="ext-watermark" rows="14" cols="60"
+                              style="display:block;margin-left:auto;margin-top:10px;resize:none;"
+                              placeholder="Extracted watermark" disabled></textarea>
+                </div>
+                <!--Extract button-->
+                <div class="col-md-2">
+
+                    <form id="extract" enctype="multipart/form-data">
+                        <span class="lab-settings">Algorithm</span>
+                        <select name="algorithm" class="form-select form-select-sm badge-lg" aria-label="Algorithm">
+                            {% for key, value in settings['algorithm'].items() %}
+                            <option value="{{key}}">{{value}}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="centered lab-xs-mar">
+                            <button id="btn-extract" type="submit" class="btn btn-primary btn-center">Extract</button>
+                            <div class="arrow">
+                                <div class="line-right"></div>
+                                <div class="point-left"></div>
+                            </div>
+                        </div>
+                        <div class="space"></div>
+                        <div class="container-border">
+                            <div>
+                                <span class="lab-settings">Channel</span>
+                                <select name="channel" class="form-select form-select-sm badge-lg" aria-label="Channel">
+                                    {% for key, value in settings['channel'].items() %}
+                                    {% if key == 'b' %}
+                                    <option value="{{key}}" selected>{{value}}</option>
+                                    {% else %}
+                                    <option value="{{key}}">{{value}}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div style="display:none;">
+                                <span class="lab-settings">Delta - Quantization step</span>
+                                <input id="sl-delta-ext" name="delta" type="range" min="5" max="9" value="5"
+                                       onchange="slideDelta(this, 'lab-delta-ext')">
+                                <label id="lab-delta-ext">Current value: 5</label>
+                            </div>
+                            <div style="display:none;">
+                                <span class="lab-settings">Alpha - Distortion compensation</span>
+                                <input id="sl-alpha-ext" name="alpha" type="range" min="0.7" max="0.95" value="0.95" step="0.05"
+                                       onchange="slideDelta(this, 'lab-alpha-ext')">
+                                <label id="lab-alpha-ext">Current value: 0.95</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!--Modified-->
+                <div class="col-md-5 container-border padding-15">
+                    <img id="modImg" src="{{ mod }}" alt="Modified Image"
+                         onclick="openModal(this)"/>
+                    <form id="form-upload-mod" class="image-upload centered lab-xs-mar">
+                        <label for="upload-mod">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                                 class="bi bi-upload" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
+                            </svg>
+                        </label>
+                        <input id="upload-mod" type='file' name='uploaded-mod'
+                               accept="image/png, image/jpeg"/>
+                    </form>
+                </div>
+
+            </div>
+            <!--SECOND ROW END-->
+            <div class="space"></div>
+
+        </div>
+    </div>
+</div>
+    <!--Progress Bar-->
+<div id="modal-bar" class="modal">
+    <div class="progress-bg padding-15 container-border modal-content-bar">
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                 style="width: 0%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

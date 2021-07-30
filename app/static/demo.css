@@ -1,0 +1,261 @@
+.section {
+  margin: 50px 100px 0px 100px;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  text-align: right;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+.img-left {
+    margin-left: auto;
+}
+
+.btn-center {
+ text-align: center;
+}
+
+.centered {
+ text-align: center;
+}
+
+.lab-xs-mar {
+    margin: 12px 2px 0px 2px;
+}
+
+.space {
+    display: inline-block;
+    margin-top: 10px;
+}
+ 
+
+
+.arrow-v {
+    width:2px;
+    height:120px;
+    position: relative;
+    background: #337ab7;
+    margin:0px 0px 30px 0px;
+    padding: 10px;}
+.arrow-v:after,
+.arrow-v:before {
+    top : 100%;
+    left : 50%;
+    border: solid transparent;
+    content: ' ';
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events:
+    none;
+}
+.arrow-v:after {
+    border-top-color:#337ab7;
+    border-width: 30px;
+    margin-left: -30px;
+}
+
+.arrow {
+  margin-top: 20px;
+  display: block;
+  width: 100%;
+  margin-bottom: 60px;
+}
+
+
+.line-left {
+  margin-top: 12px;
+  width: calc(100% - 30px);
+  background: #337ab7;
+  height: 15px;
+  float: left;
+}
+
+
+.line-right {
+  margin-top: 12px;
+  width: calc(100% - 30px);
+  background: #337ab7;
+  height: 15px;
+  float: right;
+}
+
+.point-right {
+  width: 0;
+  height: 0;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 30px solid #337ab7;
+  float: right;
+}
+
+.point-left {
+  width: 0;
+  height: 0;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-right: 30px solid #337ab7;
+  float: left;
+}
+
+.point-down {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 30px solid #337ab7;
+  float: right;
+}
+
+
+select {
+    display: block;
+    width:  100%;
+    height: 22px;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.container-border {
+    border: 1px solid;
+    padding: 0.01em 16px;
+    border-radius: 16px;
+}
+
+.padding-15 {
+    padding: 30px;
+}
+
+.lab-settings {
+    color: #337ab7;
+    font-weight: bold;
+    font-size: 18px;
+    display: inline-block;
+    margin: 12px 4px 4px 4px;
+}
+
+.controls {
+  display: flex;
+}
+
+.radio-lab {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.progress {
+    position: fixed;
+    width: 95%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.progress-bg {
+    position: fixed;
+    background-color: rgb(230,230,230);
+    width: 120%;
+    left: 50%;
+    top: 90%;
+    transform: translate(-50%, -50%);
+}
+
+/* upload and download buttons */
+
+.image-upload>label,
+.image-download>a {
+    display: inline-block;
+    cursor: pointer;
+    padding: 2px 5px 2px 5px;
+    border-style: solid;
+    border-radius: 10px;
+    color: #333;
+}
+
+.image-upload>input {
+  visibility:hidden;
+  width:0;
+  height:0
+}
+
+.image-download>a:hover,
+.image-upload>label:hover {
+    color: #337ab7;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content (image) */
+.modal-content {
+  margin: auto;
+  display: block;
+}
+
+/* Modal Content (bar) */
+.modal-content-bar {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+}
+
+
+/* Add Animation */
+.modal-content, #caption {
+  -webkit-animation-name: zoom;
+  -webkit-animation-duration: 0.6s;
+  animation-name: zoom;
+  animation-duration: 0.6s;
+}
+
+@-webkit-keyframes zoom {
+  from {-webkit-transform:scale(0)}
+  to {-webkit-transform:scale(1)}
+}
+
+@keyframes zoom {
+  from {transform:scale(0)}
+  to {transform:scale(1)}
+}
+
+/* The Close Button */
+.close {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px){
+  .modal-content {
+    width: 100%;
+  }
+}
