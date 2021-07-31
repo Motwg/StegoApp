@@ -90,52 +90,6 @@ def show_watermark(pixels, watermark, *args, **kwargs):
     return generator()
 
 
-# @wr.generate
-# def dm_qim(pixels, wm, *args):
-#     np.random.seed(0)
-#     delta = 2
-#     delta2 = delta / 2
-#     d0 = np.random.uniform(-delta2, delta2)
-#     if d0 < 0:
-#         d1 = d0 + delta2
-#     else:
-#         d1 = d0 - delta2
-#     d = (d0, d1)
-#
-#     def q(x):
-#         return np.round(x / delta) * delta
-#
-#     def generator():
-#         for x, m in zip(pixels, wm):
-#             yield q(x + d[int(m)]) - d[int(m)]
-#
-#     return generator()
-
-
-# @wr.generate
-# def i_dm_qim(pixels, *args):
-#     np.random.seed(0)
-#     delta = 0.5
-#     delta2 = delta / 2
-#     d0 = np.random.uniform(-delta2, delta2)
-#     if d0 < 0:
-#         d1 = d0 + delta2
-#     else:
-#         d1 = d0 - delta2
-#     d = (d0, d1)
-#
-#     def q(x):
-#         return np.round(x / delta) * delta
-#
-#     def generator():
-#         for z in pixels:
-#             z0 = abs(z - q(z + d[0]) + d[0])
-#             z1 = abs(z - q(z + d[1]) + d[1])
-#             yield 0 if z0 < z1 else 1
-#
-#     return generator()
-
-
 @wr.algorithm_wrapper(domain_fit=True)
 @wr.generate
 def dc_qim(pixels, watermark, *args, **kwargs):
@@ -177,26 +131,3 @@ def i_dc_qim(watermarked, *args, **kwargs):
             else:
                 yield 255
     return generator()
-
-
-if __name__ == '__main__':
-    values = [x for x in range(256)]
-
-    for i in range(2, 12):
-        print(f'delta: {i}')
-        kw = {
-            'delta': i,
-            'alpha': 0.65
-        }
-        resp1 = dc_qim([values, values, values], [0] * 256, **kw)
-        resp2 = dc_qim([values, values, values], [1] * 256, **kw)
-        # resp3 = qim([values, values, values], [0] * 256)
-        # resp4 = qim([values, values, values], [1] * 256)
-        print([resp1[2][y] for y in range(256)])
-        print([resp2[2][y] for y in range(256)])
-        # print([resp3[2][y] for y in range(256)])
-        # print([resp4[2][y] for y in range(256)])
-        resp3 = list(i_dc_qim(resp1, **kw)[2])  # lsb([values, values, values], [0] * 256)
-        resp4 = list(i_dc_qim(resp2, **kw)[2])  # lsb([values, values, values], [1] * 256)
-        print(resp3)
-        print(resp4)

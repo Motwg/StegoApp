@@ -1,3 +1,6 @@
+import base64
+from io import BytesIO
+from PIL import Image
 
 
 def switch(switcher, case, default=None):
@@ -23,3 +26,29 @@ def str_to_binary(string):
     """
     bits = ''.join([f'{char:08b}' for char in bytearray(string, 'utf-8')])
     return [*map(int, list(bits))]
+
+
+def encode_img(img, extension='PNG'):
+    """
+    Encodes pillow Image in base64
+    :param img: pillow Image to encode
+    :param extension: optional extension of image, PNG by default
+    :return: base64 encoding
+    """
+    assert isinstance(img, Image.Image)
+    file_object = BytesIO()
+    img.save(file_object, extension)
+    file_object.seek(0)
+    b64 = base64.b64encode(file_object.getvalue()).decode('ascii')
+    return f'data:image/png;base64,{b64}'
+
+
+def decode_img(b64):
+    """
+    Decoded pillow Image from base64
+    :param b64: encoded as base64 pillow Image
+    :return: decoded pillow Image
+    """
+    x = str(b64).replace('data:image/png;base64,', '')
+    x = base64.b64decode(x)
+    return Image.open(BytesIO(x))

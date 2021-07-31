@@ -3,6 +3,7 @@ from flask_bootstrap import Bootstrap
 from flask_navbar import Nav
 from flask_navbar.elements import View, Navbar
 from flask_socketio import SocketIO
+from flask_cors import CORS
 
 # Import SQLAlchemy
 # from flask.ext.sqlalchemy import SQLAlchemy
@@ -10,7 +11,10 @@ from flask_socketio import SocketIO
 mod_home = Blueprint('home', __name__, url_prefix='/')
 from . import controllers
 
-socket_io = SocketIO(async_mode='threading')
+# used with eventlet module
+socket_io = SocketIO()
+# used without eventlet
+# socket_io = SocketIO(async_mode='threading')
 
 
 def create_app():
@@ -39,8 +43,11 @@ def create_app():
     app.register_blueprint(mod_home)
     app.register_blueprint(mod_demo)
 
-    # Build the database:
+    # Build the database
     # This will create the database file using SQLAlchemy
     # db.create_all()
+
+    # Wrap app in flask socket-io
+    CORS(app)
     socket_io.init_app(app)
     return app

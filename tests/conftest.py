@@ -11,7 +11,7 @@ TEST_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'files')
 @pytest.fixture
 def client():
     app = create_app()
-    app.config["TESTING"] = True
+    app.config['TESTING'] = True
     with app.test_client() as client:
         yield client
 

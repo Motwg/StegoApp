@@ -20,11 +20,21 @@ let slideDelta = (sl, id) => {
   document.getElementById(id).innerHTML = "Current value: " + sl.value;
 }
 
+//function getBase64Image(img) {
+//  var canvas = document.createElement("canvas");
+//  canvas.width = img.width;
+//  canvas.height = img.height;
+//  var ctx = canvas.getContext("2d");
+//  ctx.drawImage(img, 0, 0);
+//  var dataURL = canvas.toDataURL("image/png");
+//  return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+//}
 
 $(document).ready(() => {
     var percentage = 0; // loading bar percentage
 
     socket = io.connect('http://' + document.domain + ':' + location.port + '/events');
+
     socket.on('progress', progress => {
         percentage = progress;
     });
@@ -108,10 +118,12 @@ $(document).ready(() => {
             contentType: false,
             success: response => {
                 // refresh standard img
-                str = $("#upImg").attr("src").split("?")[0]
-                $("#upImg").attr("src", str + "?" + Date.now());
+                $("#upImg").attr("src", response.img);
 
-                console.log(response)
+//                str = $("#upImg").attr("src").split("?")[0]
+//                $("#upImg").attr("src", str + "?" + Date.now());
+
+                console.log(response.msg)
             },
             error: err => {
                 console.log(err.responseJSON)
@@ -135,8 +147,9 @@ $(document).ready(() => {
             contentType: false,
             success: response => {
                 // refresh modified img
-                str = $("#modImg").attr("src").split("?")[0]
-                $("#modImg").attr("src", str + "?" + Date.now());
+                $("#modImg").attr("src", response.img);
+//                str = $("#modImg").attr("src").split("?")[0]
+//                $("#modImg").attr("src", str + "?" + Date.now());
 
                 console.log(response)
             },
@@ -163,6 +176,11 @@ $(document).ready(() => {
         $("form#extract :input[name='alpha']").trigger("change")
 
         let form_data = new FormData($('#embedding')[0]);
+        // add image as b64 to form
+        let file_data = $("#upImg").attr('src');
+        form_data.append("up_img", file_data);
+//        let file_data = $("#upload-image").prop("files")[0];
+//        form_data.append("upload-image", file_data);
         e.preventDefault();
         timer = startProgressBar();
         $.ajax({
@@ -173,10 +191,11 @@ $(document).ready(() => {
             data: form_data,
             success: response => {
                 // refresh embedded img
-                str = $("#embImg").attr("src").split("?")[0]
-                $("#embImg").attr("src", str + "?" + Date.now());
+                $("#embImg").attr("src", response.img);
+//                str = $("#embImg").attr("src").split("?")[0]
+//                $("#embImg").attr("src", str + "?" + Date.now());
 
-                console.log(response)
+                console.log(response.msg)
             },
             error: err => {
                 stopProgressBar(timer);
@@ -190,6 +209,10 @@ $(document).ready(() => {
     $("#btn-mod").click(e => {
         console.log('MODIFYING')
         let form_data = new FormData($('#modification')[0]);
+        // add image as b64 to form
+        let file_data = $("#embImg").attr('src');
+        form_data.append("emb_img", file_data);
+
         e.preventDefault();
         timer = startProgressBar();
         $.ajax({
@@ -199,11 +222,12 @@ $(document).ready(() => {
             contentType: false,
             data: form_data,
             success: response => {
+                $("#modImg").attr("src", response.img);
                 // refresh modified img
-                str = $("#modImg").attr("src").split("?")[0]
-                $("#modImg").attr("src", str + "?" + Date.now());
+//                str = $("#modImg").attr("src").split("?")[0]
+//                $("#modImg").attr("src", str + "?" + Date.now());
 
-                console.log(response)
+                console.log(response.msg)
             },
             error: err => {
                 stopProgressBar(timer);
@@ -217,6 +241,10 @@ $(document).ready(() => {
     $("#btn-extract").click(e => {
         console.log('EXTRACTING')
         let form_data = new FormData($('#extract')[0]);
+        // add image as b64 to form
+        let file_data = $("#modImg").attr('src');
+        form_data.append("mod_img", file_data);
+
         e.preventDefault();
         timer = startProgressBar();
         $.ajax({
@@ -226,8 +254,8 @@ $(document).ready(() => {
             contentType: false,
             data: form_data,
             success: response => {
-                console.log(response);
                 $("#ext-watermark").val(response.watermark);
+                console.log(response.msg);
             },
             error: err => {
                 stopProgressBar(timer);

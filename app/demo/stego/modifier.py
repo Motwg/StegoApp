@@ -1,6 +1,5 @@
-import os
 from PIL import ImageEnhance, Image
-from flask import current_app
+from io import BytesIO
 
 from app.demo.stego.utils import switch
 
@@ -12,13 +11,13 @@ def attack_switcher():
         'crop_50': ('Crop 50%', crop_50),
         'sharpen': ('Sharpen', sharpen),
         'blur': ('Blur', blur),
-        'conv_bmp_24b': ('BMP 24-bit conversion', conv_bmp_24b),
+        'conv_bmp_24b': ('BMP 24-bit conversion', conv_to, ('BMP',)),
         'conv_bmp_256c': ('BMP 256-colours conversion', conv_bmp_no_col, (256,)),
         'conv_bmp_64c': ('BMP 64-colours conversion', conv_bmp_no_col, (64,)),
         'conv_bmp_16c': ('BMP 16-colours conversion', conv_bmp_no_col, (16,)),
         'conv_png': ('PNG conversion', lambda img: img),
-        'conv_tiff': ('TIFF conversion', conv_tiff),
-        'conv_jp2': ('JPEG 2000 conversion', conv_jp2),
+        'conv_tiff': ('TIFF conversion', conv_to, ('TIFF',)),
+        'conv_jp2': ('JPEG 2000 conversion', conv_to, ('JPEG2000',)),
         'jpeg_10': ('JPEG compression 10%', compression, (90,)),
         'jpeg_20': ('JPEG compression 20%', compression, (80,)),
         'jpeg_50': ('JPEG compression 50%', compression, (50,))
@@ -47,46 +46,22 @@ def blur(img):
     return ImageEnhance.Sharpness(img).enhance(0.5)
 
 
-def conv_tiff(img):
+def conv_to(img, extension):
     assert isinstance(img, Image.Image)
+    stream = BytesIO()
     img.save(
-        os.path.join(current_app.config['MOD_DIR'], 'img.tiff'),
-        'TIFF'
+        stream,
+        extension
     )
-    tiff = Image.open(os.path.join(current_app.config['MOD_DIR'], 'img.tiff'))
-    tiff.save(
-        os.path.join(current_app.config['MOD_DIR'], 'from_tiff.png'),
+    stream.seek(0)
+    jpeg = Image.open(stream)
+    stream.flush()
+    jpeg.save(
+        stream,
         'PNG'
     )
-    return Image.open(os.path.join(current_app.config['MOD_DIR'], 'from_tiff.png'))
-
-
-def conv_jp2(img):
-    assert isinstance(img, Image.Image)
-    img.save(
-        os.path.join(current_app.config['MOD_DIR'], 'img.jp2'),
-        'JPEG2000'
-    )
-    tiff = Image.open(os.path.join(current_app.config['MOD_DIR'], 'img.jp2'))
-    tiff.save(
-        os.path.join(current_app.config['MOD_DIR'], 'from_jp2.png'),
-        'PNG'
-    )
-    return Image.open(os.path.join(current_app.config['MOD_DIR'], 'from_jp2.png'))
-
-
-def conv_bmp_24b(img):
-    assert isinstance(img, Image.Image)
-    img.save(
-        os.path.join(current_app.config['MOD_DIR'], 'img.bmp'),
-        'BMP'
-    )
-    bmp = Image.open(os.path.join(current_app.config['MOD_DIR'], 'img.bmp'))
-    bmp.save(
-        os.path.join(current_app.config['MOD_DIR'], 'from_bmp.png'),
-        'PNG'
-    )
-    return Image.open(os.path.join(current_app.config['MOD_DIR'], 'from_bmp.png'))
+    stream.seek(0)
+    return Image.open(stream)
 
 
 def conv_bmp_no_col(img, no_colours):
@@ -97,18 +72,22 @@ def conv_bmp_no_col(img, no_colours):
 
 def compression(img, quality):
     assert isinstance(img, Image.Image)
+    stream = BytesIO()
     img.save(
-        os.path.join(current_app.config['MOD_DIR'], 'img.jpg'),
+        stream,
         'JPEG',
         quality=quality,
         subsampling=0
     )
-    jpeg = Image.open(os.path.join(current_app.config['MOD_DIR'], 'img.jpg'))
+    stream.seek(0)
+    jpeg = Image.open(stream)
+    stream.flush()
     jpeg.save(
-        os.path.join(current_app.config['MOD_DIR'], 'from_jpg.png'),
+        stream,
         'PNG'
     )
-    return Image.open(os.path.join(current_app.config['MOD_DIR'], 'from_jpg.png'))
+    stream.seek(0)
+    return Image.open(stream)
 
 
 class Modifier:
