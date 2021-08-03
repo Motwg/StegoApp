@@ -98,7 +98,7 @@ def image_to_pixels(img, no_channels):
     pixels = np.asarray(img)
     # shape: ((r, g, b) x pixels) => pixels grouped by channel ((r x pixels), (g x pixels), (b x pixels))
     try:
-        pixels = np.array(pixels).reshape((img.size[1] * img.size[0], no_channels)).transpose()
+        pixels = np.array(pixels).reshape((img.size[1] * img.size[0], len(img.getbands()))).transpose()
     except ValueError:
         pixels = np.array(pixels).reshape((img.size[1], no_channels)).transpose()
     return pixels
@@ -107,7 +107,7 @@ def image_to_pixels(img, no_channels):
 def pixels_to_image(pixels, no_channels, img):
     # shape: ((r, g, b) x pixels) <= pixels grouped by channel ((r x pixels), (g x pixels), (b x pixels))
     if isinstance(img, Image.Image):
-        pixels = np.array(pixels).transpose().reshape(img.size[1], img.size[0], no_channels)
+        pixels = np.array(pixels).transpose().reshape(img.size[1], img.size[0], len(img.getbands()))
     else:
         pixels = np.array(pixels).transpose().reshape(len(img[0]), no_channels)
     return Image.fromarray(pixels)
