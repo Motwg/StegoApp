@@ -18,7 +18,6 @@ def algorithm_switcher():
         'lsb': ('Least Significant Bit', alg.lsb, alg.i_lsb),
         'qim': ('QIM', alg.qim, alg.i_qim),
         'dc_qim': ('DC-QIM', alg.dc_qim, alg.i_dc_qim),
-        'show_watermark': ('Show Watermark', alg.show_watermark)
     }, 'lsb'  # default set lsb
 
 

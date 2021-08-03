@@ -58,38 +58,6 @@ def i_qim(watermarked, *args, **kwargs):
     return generator()
 
 
-@wr.generate
-def double_qim(pixels, d_watermark, *args, **kwargs):
-    delta = 4
-
-    def q(x, w):
-        return np.round(x / delta) * delta - (-1) ** w * delta / 4
-
-    def q1(x, w):
-        return np.round(x / delta) * delta - (-1) ** w * delta / 2
-
-    def generator():
-        for x, w in zip(pixels, d_watermark):
-            yield q(q1(x, w % 2), w // 2)
-
-    return generator()
-
-
-@wr.i_algorithm_wrapper
-@wr.generate
-def show_watermark(pixels, watermark, *args, **kwargs):
-    def generator():
-        for x, y in zip(pixels, watermark):
-            if y == 0:
-                yield 0
-            elif y == 1:
-                yield 1
-            else:
-                raise Exception('Wrong watermark')
-
-    return generator()
-
-
 @wr.algorithm_wrapper(domain_fit=True)
 @wr.generate
 def dc_qim(pixels, watermark, *args, **kwargs):
@@ -129,5 +97,5 @@ def i_dc_qim(watermarked, *args, **kwargs):
             if d0 < d1:
                 yield 0
             else:
-                yield 255
+                yield 1
     return generator()

@@ -5,9 +5,6 @@ from flask_navbar.elements import View, Navbar
 from flask_socketio import SocketIO
 from flask_cors import CORS
 
-# Import SQLAlchemy
-# from flask.ext.sqlalchemy import SQLAlchemy
-
 mod_home = Blueprint('home', __name__, url_prefix='/')
 from . import controllers
 
@@ -21,8 +18,8 @@ def create_app():
     app = Flask(__name__)
     # registers the "top" menu bar
     top_bar = Navbar(
-        View('Home', 'home.get_home'),
-        View('Demo', 'demo.get_demo')
+        View('Background', 'home.get_home'),
+        View('Watermarking Demo', 'demo.get_demo')
     )
     nav = Nav(app)
     nav.register_element('top', top_bar)
@@ -34,18 +31,10 @@ def create_app():
     from app.demo.stego.progress_callback import ProgressCallback
     app.config['progress_cb'] = ProgressCallback()
 
-    # Define the database object which is imported
-    # by modules and controllers
-    # db = SQLAlchemy(app)
-
     # Register blueprint(s)
     from app.demo import mod_demo
     app.register_blueprint(mod_home)
     app.register_blueprint(mod_demo)
-
-    # Build the database
-    # This will create the database file using SQLAlchemy
-    # db.create_all()
 
     # Wrap app in flask socket-io
     CORS(app)

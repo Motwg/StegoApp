@@ -2,23 +2,126 @@
 
 {% extends "base.html" %}
 
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" type="text/css"
+      href="{{url_for('static', filename='home.css')}}">
+{% endblock %}
+
 {% block content %}
-<div class="container-fluid section">
-    <div class="row">
+<div class="container ">
+    <div class="row jumbotron card card-block">
         <div class="col-md-12">
-            <div class="jumbotron card card-block">
                 <h2>
-                    Hello, world!
+                    Dear User,
                 </h2>
                 <p>
-                    This is a template for a simple marketing or informational website. It includes a large callout
-                    called the hero unit and three supporting pieces of content. Use it as a starting point to create
-                    something more unique.
+                    This webpage was created in order to show how can you hide some message called "watermark" in almost
+                    any picture using different <a href="https://en.wikipedia.org/wiki/Steganography">steganography</a> algorithms
+                    and compare their resistance on some chosen attacks, which might change or even erase your watermark from the image.
                 </p>
-                <p>
-                    <a class="btn btn-primary btn-large" href="#">Learn more</a>
-                </p>
+                <br>
+        </div>
+    </div>
+    <div class="row jumbotron card card-block">
+        <div class="col-md-12 ">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>How to use the app?</h2>
+                        <hr>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12"><h3><b>Step 1</b></h3></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>In the first section find text field called "Watermark" <b>1</b>.
+                            Type your message here, which you wish to hide in an image shown above <b>3</b>.
+                            There is also a possibility to chose your own image from disk - just press the button
+                            with an arrow pointing up <b>2</b> and chose any picture with jpg or png extension.
+                            After successful upload of the file your image should appear above <b>3</b>.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <img src="{{ url_for('static', filename='manual/section_1.png') }}"/>
+                    </div>
+                </div>
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-12"><h3><b>Step 2</b></h3></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <img src="{{ url_for('static', filename='manual/inter_1.png') }}"/>
+                    </div>
+                    <div class="col-md-9">
+                        <p>Now is time to choose one of implemented steganography algorithms. Find a field
+                            "Algorithm" <b>1</b> and chose which one would you like to use. Depending on your choice
+                            different parameters may be shown in the panel <b>3</b>. One of them - "Channel" is shared
+                            by them and represents in which channel in the image (red, green or blue) algorithm should
+                            embed your watermark. You can also change other parameters as you wish.
+                            When you are ready press "Embedding" button <b>2</b> and wait until a loading bar fills up.
+                        </p>
+                    </div>
+                </div>
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-12"><h3><b>Step 3</b></h3></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>After disappearing of the loading bar your image with hidden watermark should appear
+                            in second section <b>1</b>. It is available to download by pressing the button
+                            with an arrow pointing down <b>2</b>. When you are ready proceed to the field "Type of
+                            attack" <b>3</b> and chose any attack to apply to your image. By default when you uploaded
+                            your image it was converted to png extension.
+                            That means an attack <span style="color:red">"PNG conversion" would not change the image
+                                in any way - just like there is no attack. </span>
+                            In order to continue press "Perform attack"
+                            button <b>3</b> and wait until a loading bar fills up.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <img src="{{ url_for('static', filename='manual/section_2.png') }}"/>
+                    </div>
+                </div>
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-12"><h3><b>Step 4</b></h3></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <img src="{{ url_for('static', filename='manual/section_3.png') }}"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12" style="padding-top:15px;">
+                            <p>After disappearing of the loading bar your modified image <b>1</b> will show up.
+                                Then use the same algorithm <b>3</b> and parameters <b>5</b> as in <b>Step 2</b>
+                                (or another if you know what to do)
+                                and press "Extract" button <b>4</b>. A loading bar should pop up and it may take some time.
+                                Finally, when the process of extracting is completed your message (or rather what's left
+                                from your message depending of chosen attack and algorithm) should appear in the field <b>6</b> on the left.
+                                <br>
+                                <span style="color:red">Your message might be duplicated</span> due to the fact that implemented
+                                algorithms embed watermark many times in an image in order to resist an attack.
+                                <br>
+                                There is also a possibility to chose your own image from disk and skip the whole process
+                                of attacking an image - just press the button with an arrow pointing up <b>2</b>
+                                and chose any picture with jpg or png extension.
+                        </p>
+                    </div>
+                </div>
+                <hr>
+
             </div>
+            <a class="btn btn-primary btn-large" href="/demo">Let's begin!</a>
         </div>
     </div>
 </div>

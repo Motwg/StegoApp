@@ -20,16 +20,6 @@ let slideDelta = (sl, id) => {
   document.getElementById(id).innerHTML = "Current value: " + sl.value;
 }
 
-//function getBase64Image(img) {
-//  var canvas = document.createElement("canvas");
-//  canvas.width = img.width;
-//  canvas.height = img.height;
-//  var ctx = canvas.getContext("2d");
-//  ctx.drawImage(img, 0, 0);
-//  var dataURL = canvas.toDataURL("image/png");
-//  return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-//}
-
 $(document).ready(() => {
     var percentage = 0; // loading bar percentage
 
@@ -54,7 +44,7 @@ $(document).ready(() => {
             processProgressBar(timer);
         }, 100);
 
-        return timer
+        return timer // timer needs to be stopped by stopProgressBar function
     }
 
     let stopProgressBar = timer => {
@@ -68,8 +58,7 @@ $(document).ready(() => {
     let scheme = {
         'lsb': ['channel'],
         'qim': ['channel', 'delta'],
-        'dc_qim': ['channel', 'delta', 'alpha'],
-        'show_watermark': ['channel']
+        'dc_qim': ['channel', 'delta', 'alpha']
     };
 
     // auto hiding/showing options
@@ -105,7 +94,6 @@ $(document).ready(() => {
 
 
     $("#upload-image").change(e => {
-        console.log('UPLOAD IMG')
         let file_data = $("#upload-image").prop("files")[0];
         let form_data = new FormData();
         form_data.append("upload-image", file_data);
@@ -119,11 +107,6 @@ $(document).ready(() => {
             success: response => {
                 // refresh standard img
                 $("#upImg").attr("src", response.img);
-
-//                str = $("#upImg").attr("src").split("?")[0]
-//                $("#upImg").attr("src", str + "?" + Date.now());
-
-                console.log(response.msg)
             },
             error: err => {
                 console.log(err.responseJSON)
@@ -134,7 +117,6 @@ $(document).ready(() => {
 
 
     $("#upload-mod").change(e => {
-        console.log('UPLOAD MOD')
         let file_data = $("#upload-mod").prop("files")[0];
         let form_data = new FormData();
         form_data.append("upload-mod", file_data);
@@ -148,10 +130,6 @@ $(document).ready(() => {
             success: response => {
                 // refresh modified img
                 $("#modImg").attr("src", response.img);
-//                str = $("#modImg").attr("src").split("?")[0]
-//                $("#modImg").attr("src", str + "?" + Date.now());
-
-                console.log(response)
             },
             error: err => {
                 console.log(err.responseJSON)
@@ -162,8 +140,6 @@ $(document).ready(() => {
 
 
     $("#btn-embed").click(e => {
-        console.log('EMBEDDING')
-
         // auto fill extraction options
         $("form#embedding :input").each(function() {
              let input = $(this);
@@ -179,8 +155,7 @@ $(document).ready(() => {
         // add image as b64 to form
         let file_data = $("#upImg").attr('src');
         form_data.append("up_img", file_data);
-//        let file_data = $("#upload-image").prop("files")[0];
-//        form_data.append("upload-image", file_data);
+
         e.preventDefault();
         timer = startProgressBar();
         $.ajax({
@@ -192,10 +167,6 @@ $(document).ready(() => {
             success: response => {
                 // refresh embedded img
                 $("#embImg").attr("src", response.img);
-//                str = $("#embImg").attr("src").split("?")[0]
-//                $("#embImg").attr("src", str + "?" + Date.now());
-
-                console.log(response.msg)
             },
             error: err => {
                 stopProgressBar(timer);
@@ -222,12 +193,8 @@ $(document).ready(() => {
             contentType: false,
             data: form_data,
             success: response => {
-                $("#modImg").attr("src", response.img);
                 // refresh modified img
-//                str = $("#modImg").attr("src").split("?")[0]
-//                $("#modImg").attr("src", str + "?" + Date.now());
-
-                console.log(response.msg)
+                $("#modImg").attr("src", response.img);
             },
             error: err => {
                 stopProgressBar(timer);
@@ -255,7 +222,6 @@ $(document).ready(() => {
             data: form_data,
             success: response => {
                 $("#ext-watermark").val(response.watermark);
-                console.log(response.msg);
             },
             error: err => {
                 stopProgressBar(timer);

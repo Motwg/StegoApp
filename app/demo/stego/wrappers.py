@@ -83,7 +83,7 @@ def generate(generator):
                         arr.append(p)
                         cb.add_current_value(1)
                     pixels[ch] = np.array(arr)
-                    return pixels
+                return pixels
 
         # Progress callback is not available
         for ch in channels:

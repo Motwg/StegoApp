@@ -100,6 +100,7 @@ class Modifier:
         try:
             args = switch(attack_switcher, self.attack)[2]
             return function(img, *args)
+        # without extra args
         except IndexError:
             return function(img)
 

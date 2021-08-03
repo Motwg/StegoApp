@@ -1,8 +1,8 @@
-import os
-import numpy as np
-from PIL import Image
 import cv2
-from flask import render_template, request, current_app, redirect, url_for, make_response, jsonify
+import numpy as np
+import os
+from flask import render_template, request, current_app, redirect, url_for, make_response, jsonify, abort
+from PIL import Image
 
 from . import mod_demo, MOD_NAME
 from .stego.embedder import Embedder
@@ -42,10 +42,7 @@ def get_demo():
             settings=settings
         )
     except Exception as e:
-        return make_response(
-            jsonify({'msg': str(e)}),
-            500
-        )
+        abort(500)
 
 
 @mod_demo.route('uploader/image', methods=['POST'])
@@ -159,8 +156,7 @@ def extract_watermark():
             jsonify({
                 'msg': 'Watermark extracted successfully',
                 'watermark': extracted
-            }),
-            200
+            }), 200
         )
     except Exception as e:
         return make_response(
