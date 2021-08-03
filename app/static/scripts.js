@@ -167,6 +167,7 @@ $(document).ready(() => {
             success: response => {
                 // refresh embedded img
                 $("#embImg").attr("src", response.img);
+                $("#download-file").attr("href", response.img);
             },
             error: err => {
                 stopProgressBar(timer);
