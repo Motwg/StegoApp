@@ -18,6 +18,7 @@ def algorithm_switcher():
         'lsb': ('Least Significant Bit', alg.lsb, alg.i_lsb),
         'qim': ('QIM', alg.qim, alg.i_qim),
         'dc_qim': ('DC-QIM', alg.dc_qim, alg.i_dc_qim),
+        'none': ('None', lambda x, *args, **kwargs: x)
     }, 'lsb'  # default set lsb
 
 

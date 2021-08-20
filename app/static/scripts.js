@@ -20,6 +20,7 @@ let slideDelta = (sl, id) => {
   document.getElementById(id).innerHTML = "Current value: " + sl.value;
 }
 
+
 $(document).ready(() => {
     var percentage = 0; // loading bar percentage
 
@@ -30,7 +31,6 @@ $(document).ready(() => {
     });
 
     let startProgressBar = () => {
-        console.log('STARTING')
         openProgressModal()
         let processProgressBar = (timer) => {
             $(".progress-bar").css("width", percentage + "%");
@@ -49,14 +49,14 @@ $(document).ready(() => {
 
     let stopProgressBar = timer => {
         clearInterval(timer);
-        console.log('STOPPING')
         socket.emit('reset_progress_bar');
-        closeModal("modal-bar")
+        closeModal("modal-bar");
         $('.progress-bar').css('width', '0%');
     }
 
     let scheme = {
         'lsb': ['channel'],
+        'none': [],
         'qim': ['channel', 'delta'],
         'dc_qim': ['channel', 'delta', 'alpha']
     };
@@ -109,7 +109,7 @@ $(document).ready(() => {
                 $("#upImg").attr("src", response.img);
             },
             error: err => {
-                console.log(err.responseJSON)
+                console.log(err.responseJSON);
                 alert(err.responseJSON.msg);
             }
         });
@@ -132,7 +132,7 @@ $(document).ready(() => {
                 $("#modImg").attr("src", response.img);
             },
             error: err => {
-                console.log(err.responseJSON)
+                console.log(err.responseJSON);
                 alert(err.responseJSON.msg);
             }
         });
@@ -171,7 +171,7 @@ $(document).ready(() => {
             },
             error: err => {
                 stopProgressBar(timer);
-                console.log(err.responseJSON)
+                console.log(err.responseJSON);
                 alert(err.responseJSON.msg);
             }
         });
@@ -179,7 +179,6 @@ $(document).ready(() => {
 
 
     $("#btn-mod").click(e => {
-        console.log('MODIFYING')
         let form_data = new FormData($('#modification')[0]);
         // add image as b64 to form
         let file_data = $("#embImg").attr('src');
@@ -199,7 +198,7 @@ $(document).ready(() => {
             },
             error: err => {
                 stopProgressBar(timer);
-                console.log(err.responseJSON)
+                console.log(err.responseJSON);
                 alert(err.responseJSON.msg);
             }
         });
@@ -207,7 +206,6 @@ $(document).ready(() => {
 
 
     $("#btn-extract").click(e => {
-        console.log('EXTRACTING')
         let form_data = new FormData($('#extract')[0]);
         // add image as b64 to form
         let file_data = $("#modImg").attr('src');
@@ -223,6 +221,45 @@ $(document).ready(() => {
             data: form_data,
             success: response => {
                 $("#ext-watermark").val(response.watermark);
+            },
+            error: err => {
+                stopProgressBar(timer);
+                console.log(err.responseJSON);
+                alert(err.responseJSON.msg);
+            }
+        });
+    });
+
+    let detectWatermark = (det, prob) => {
+        let text = "";
+        if(det === "0") {
+            text = "Watermark not detected ";
+        }
+        else {
+            text = "Watermark detected ";
+        }
+        return text + "(" + prob + "%)";
+    };
+
+    $("#btn-steganalysis").click(e => {
+        let form_data = new FormData($("#steganalysis")[0]);
+        // add image as b64 to form
+        let file_data = $("#embImg").attr('src');
+        form_data.append("emb_img", file_data);
+
+        e.preventDefault();
+        timer = startProgressBar();
+        $.ajax({
+            type:'POST',
+            url:'/demo/steganalysis',
+            processData: false,
+            contentType: false,
+            data: form_data,
+            success: response => {
+                $('#red').html(detectWatermark(response.r, response.r_p));
+                $('#green').html(detectWatermark(response.g, response.g_p));
+                $('#blue').html(detectWatermark(response.b, response.b_p));
+                $('#steganalysisModal').modal();
             },
             error: err => {
                 stopProgressBar(timer);

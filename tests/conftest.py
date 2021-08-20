@@ -18,7 +18,27 @@ def client():
 
 @pytest.fixture
 def image():
-    return Image.open(os.path.join(TEST_DIR, 'img0.png'))
+    return Image.open(os.path.join(TEST_DIR, 'rgb_640x480.png'))
+
+
+@pytest.fixture
+def jpg_image():
+    return Image.open(os.path.join(TEST_DIR, 'rgb_640x480.jpg'))
+
+
+@pytest.fixture
+def huge_image():
+    return Image.open(os.path.join(TEST_DIR, 'rgb_2000x1500.jpg'))
+
+
+@pytest.fixture
+def small_image():
+    return Image.open(os.path.join(TEST_DIR, 'rgba_32x32.png'))
+
+
+@pytest.fixture
+def rgba_image():
+    return Image.open(os.path.join(TEST_DIR, 'rgba_32x32.png'))
 
 
 @pytest.fixture

@@ -126,11 +126,12 @@ def bytes_to_utf8(byte_arr):
     return bytearray(byte_arr).decode('utf-8', 'ignore')
 
 
-def fill_watermark(watermark, channel_size):
+def fill_watermark(watermark_pattern, channel_size):
     # repeat watermark
-    if len(watermark) > 0:
-        while channel_size > len(watermark) * 2:
-            watermark = watermark * 2
+    watermark = watermark_pattern.copy()
+    if len(watermark_pattern) > 0:
+        while channel_size > len(watermark) + len(watermark_pattern):
+            watermark.extend(watermark_pattern)
 
     # fill watermark with 0
     while channel_size > len(watermark):
