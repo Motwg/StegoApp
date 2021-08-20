@@ -1,5 +1,8 @@
 # Requirements
 - Installed Python 3.8
+- [Optional] Install Nvidia CUDA 10.1 https://developer.nvidia.com/cuda-downloads (improve performance, needs cuDNN)
+- [Optional] Install cuDNN 7.6 https://developer.nvidia.com/cudnn
+
 # Virtual environment configuration (optional)
 - Proceed to the catalog for the project
 - `python3 -m venv stego-venv`
