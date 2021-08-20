@@ -1,6 +1,5 @@
 # Requirements
-- Installed Python 3.8 (Python 3.9 may also work)
-
+- Installed Python 3.8
 # Virtual environment configuration (optional)
 - Proceed to the catalog for the project
 - `python3 -m venv stego-venv`
