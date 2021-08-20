@@ -15,6 +15,7 @@ socket_io = SocketIO()
 
 
 def create_app():
+    print('[INFO] Starting loading')
     app = Flask(__name__)
     # registers the "top" menu bar
     top_bar = Navbar(
@@ -26,12 +27,14 @@ def create_app():
     Bootstrap(app)
 
     # Configurations
+    print('[INFO] Loading configuration')
     app.config.from_object('config')
 
     from app.demo.stego.progress_callback import ProgressCallback
     app.config['progress_cb'] = ProgressCallback()
 
     # Register blueprint(s)
+    print('[INFO] Loading blueprints')
     from app.demo import mod_demo
     app.register_blueprint(mod_home)
     app.register_blueprint(mod_demo)
@@ -39,4 +42,6 @@ def create_app():
     # Wrap app in flask socket-io
     CORS(app)
     socket_io.init_app(app)
+
+    print('[INFO] Loading complete')
     return app

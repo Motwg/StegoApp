@@ -8,6 +8,7 @@ from . import mod_demo, MOD_NAME
 from .stego.embedder import Embedder
 from .stego.extractor import Extractor
 from .stego.modifier import Modifier
+from .stego.server_model import ServerModel
 from .stego.utils import str_to_binary, encode_img, decode_img
 
 
@@ -156,6 +157,34 @@ def extract_watermark():
             jsonify({
                 'msg': 'Watermark extracted successfully',
                 'watermark': extracted
+            }), 200
+        )
+    except Exception as e:
+        return make_response(
+            jsonify({'msg': str(e)}),
+            500
+        )
+
+
+@mod_demo.route('steganalysis', methods=['POST'])
+def steganalysis():
+    try:
+        settings = request.form.to_dict()
+        img = decode_img(settings.pop('emb_img'))
+        cb = current_app.config['progress_cb']
+        assert isinstance(img, Image.Image)
+        cb.add_max_value(1)
+        x = ServerModel()(img)
+        cb.add_current_value(1)
+        return make_response(
+            jsonify({
+                'msg': 'Steganalysis completed',
+                'r': f'{x[0][0]}',
+                'g': f'{x[1][0]}',
+                'b': f'{x[2][0]}',
+                'r_p': f'{x[0][1]}',
+                'g_p': f'{x[1][1]}',
+                'b_p': f'{x[2][1]}'
             }), 200
         )
     except Exception as e:

@@ -22,7 +22,7 @@ def switch(switcher, case, default=None):
 def str_to_binary(string):
     """
     :param string: any string
-    :return: binary representation of string as list
+    :return: binary representation of string as a list
     """
     bits = ''.join([f'{char:08b}' for char in bytearray(string, 'utf-8')])
     return [*map(int, list(bits))]
@@ -32,7 +32,7 @@ def encode_img(img, extension='PNG'):
     """
     Encodes pillow Image in base64
     :param img: pillow Image to encode
-    :param extension: optional extension of image, PNG by default
+    :param extension: optional extension of the image, PNG by default
     :return: base64 encoding
     """
     assert isinstance(img, Image.Image)
