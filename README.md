@@ -1,7 +1,5 @@
 # Requirements
 - Installed Python 3.8
-- [Optional] Install Nvidia CUDA 10.1 https://developer.nvidia.com/cuda-downloads (improve performance, needs cuDNN)
-- [Optional] Install cuDNN 7.6 https://developer.nvidia.com/cudnn
 
 # Virtual environment configuration (optional)
 - Proceed to the catalog for the project
@@ -10,8 +8,8 @@
 - On **Windows**, run: `stego-venv\Scripts\activate.bat`
 
 # Start server
-- Proceed to the catalog for the project
-- `pip install -r requirements.txt`
+- Proceed to the root of the project
+- Run `python3 pip install -r requirements.txt`
 - Port may be adjusted manually in run.py file
-- Run `python run.py` in project catalog
-- http://localhost:5000/
+- Run `python3 run.py` in project catalog
+- Visit http://localhost:5000/ (in case of changing port replace 5000 with your own)
