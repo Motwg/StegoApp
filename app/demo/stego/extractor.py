@@ -12,4 +12,4 @@ class Extractor(Template):
             function = switch(algorithm_switcher, self.algorithm)[2]
             return function(image, None, cb, **self.settings)
         except IndexError:
-            raise Exception(f'Extract function for {self.algorithm} algorithm may not available')
+            raise Exception(f'Extract function for {self.algorithm} algorithm may not be available')
