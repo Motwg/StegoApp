@@ -24,7 +24,7 @@ let slideDelta = (sl, id) => {
 $(document).ready(() => {
     var percentage = 0; // loading bar percentage
 
-    socket = io.connect('http://' + document.domain + ':' + location.port + '/events');
+    socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + '/events');
 
     socket.on('progress', progress => {
         percentage = progress;
