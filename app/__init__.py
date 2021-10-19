@@ -41,7 +41,7 @@ def create_app():
 
     # Wrap app in flask socket-io
     CORS(app)
-    socket_io.init_app(app)
+    socket_io.init_app(app, cors_allowed_origins='*')
 
     print('[INFO] Loading complete')
     return app
