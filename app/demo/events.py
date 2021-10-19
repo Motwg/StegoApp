@@ -15,3 +15,8 @@ def reset_progress():
     cb = current_app.config['progress_cb']
     cb.reset()
     emit('progress', cb.progress)
+
+
+@socket_io.on_error_default
+def default_error_handler(e):
+    pass

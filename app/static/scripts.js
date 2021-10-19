@@ -23,8 +23,7 @@ let slideDelta = (sl, id) => {
 
 $(document).ready(() => {
     var percentage = 0; // loading bar percentage
-
-    socket = io.connect('http://' + document.domain + ':' + location.port + '/events');
+    const socket = io("/events");
 
     socket.on('progress', progress => {
         percentage = progress;
@@ -42,7 +41,7 @@ $(document).ready(() => {
         let timer = setInterval(() => {
             socket.emit('check_progress_bar')
             processProgressBar(timer);
-        }, 100);
+        }, 300);
 
         return timer // timer needs to be stopped by stopProgressBar function
     }
@@ -170,9 +169,11 @@ $(document).ready(() => {
                 $("#download-file").attr("href", response.img);
             },
             error: err => {
-                stopProgressBar(timer);
                 console.log(err.responseJSON);
                 alert(err.responseJSON.msg);
+            },
+            complete: () => {
+                stopProgressBar(timer);
             }
         });
     });
@@ -197,9 +198,11 @@ $(document).ready(() => {
                 $("#modImg").attr("src", response.img);
             },
             error: err => {
-                stopProgressBar(timer);
                 console.log(err.responseJSON);
                 alert(err.responseJSON.msg);
+            },
+            complete: () => {
+                stopProgressBar(timer);
             }
         });
     });
@@ -223,9 +226,11 @@ $(document).ready(() => {
                 $("#ext-watermark").val(response.watermark);
             },
             error: err => {
-                stopProgressBar(timer);
                 console.log(err.responseJSON);
                 alert(err.responseJSON.msg);
+            },
+            complete: () => {
+                stopProgressBar(timer);
             }
         });
     });
@@ -262,9 +267,11 @@ $(document).ready(() => {
                 $('#steganalysisModal').modal();
             },
             error: err => {
-                stopProgressBar(timer);
                 console.log(err.responseJSON);
                 alert(err.responseJSON.msg);
+            },
+            complete: () => {
+                stopProgressBar(timer);
             }
         });
     });

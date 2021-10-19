@@ -8,10 +8,8 @@ img {
   text-align: right;
   transition: 0.3s ease;
   cursor: pointer;
-}
-
-.img-left {
-    margin-left: auto;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .btn-center {
