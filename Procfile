@@ -1,1 +1,1 @@
-web: gunicorn -k eventlet wsgi:app  
+web: gunicorn run:app
