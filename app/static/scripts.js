@@ -33,15 +33,12 @@ $(document).ready(() => {
         openProgressModal()
         let processProgressBar = (timer) => {
             $(".progress-bar").css("width", percentage + "%");
-            if(percentage >= 100) {
-                stopProgressBar(timer)
-             }
         }
 
         let timer = setInterval(() => {
-            socket.emit('check_progress_bar')
+            socket.emit('check_progress_bar');
             processProgressBar(timer);
-        }, 300);
+        }, 250);
 
         return timer // timer needs to be stopped by stopProgressBar function
     }
@@ -97,6 +94,7 @@ $(document).ready(() => {
         let form_data = new FormData();
         form_data.append("upload-image", file_data);
         e.preventDefault();
+        let timer = startProgressBar();
         $.ajax({
             type:'POST',
             url:'/demo/uploader/image',
@@ -110,6 +108,9 @@ $(document).ready(() => {
             error: err => {
                 console.log(err.responseJSON);
                 alert(err.responseJSON.msg);
+            },
+            complete: () => {
+                stopProgressBar(timer);
             }
         });
     });
@@ -120,6 +121,7 @@ $(document).ready(() => {
         let form_data = new FormData();
         form_data.append("upload-mod", file_data);
         e.preventDefault();
+        let timer = startProgressBar();
         $.ajax({
             type:'POST',
             url:'/demo/uploader/mod',
@@ -133,6 +135,9 @@ $(document).ready(() => {
             error: err => {
                 console.log(err.responseJSON);
                 alert(err.responseJSON.msg);
+            },
+            complete: () => {
+                stopProgressBar(timer);
             }
         });
     });
@@ -156,7 +161,7 @@ $(document).ready(() => {
         form_data.append("up_img", file_data);
 
         e.preventDefault();
-        timer = startProgressBar();
+        let timer = startProgressBar();
         $.ajax({
             type:'POST',
             url:'/demo/embedding',
@@ -186,7 +191,7 @@ $(document).ready(() => {
         form_data.append("emb_img", file_data);
 
         e.preventDefault();
-        timer = startProgressBar();
+        let timer = startProgressBar();
         $.ajax({
             type:'POST',
             url:'/demo/modify',
@@ -215,7 +220,7 @@ $(document).ready(() => {
         form_data.append("mod_img", file_data);
 
         e.preventDefault();
-        timer = startProgressBar();
+        let timer = startProgressBar();
         $.ajax({
             type:'POST',
             url:'/demo/extract',
@@ -253,7 +258,7 @@ $(document).ready(() => {
         form_data.append("emb_img", file_data);
 
         e.preventDefault();
-        timer = startProgressBar();
+        let timer = startProgressBar();
         $.ajax({
             type:'POST',
             url:'/demo/steganalysis',

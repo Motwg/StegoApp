@@ -9,7 +9,10 @@ mod_home = Blueprint('home', __name__, url_prefix='/')
 from . import controllers
 
 # used with eventlet module
-socket_io = SocketIO()
+socket_io = SocketIO(async_mode='eventlet')
+import eventlet
+eventlet.monkey_patch()
+
 # used without eventlet
 # socket_io = SocketIO(async_mode='threading')
 
@@ -41,7 +44,7 @@ def create_app():
 
     # Wrap app in flask socket-io
     CORS(app)
-    socket_io.init_app(app, cors_allowed_origins='*')
+    socket_io.init_app(app)
 
     print('[INFO] Loading complete')
     return app

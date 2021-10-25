@@ -1,6 +1,7 @@
 from PIL import Image
 import numpy as np
 from functools import wraps
+import eventlet
 
 from .progress_callback import ProgressCallback
 
@@ -82,6 +83,7 @@ def generate(generator):
                     for p in generator(pixels[ch], watermark, *args, **kwargs):
                         arr.append(p)
                         cb.add_current_value(1)
+                        eventlet.sleep()
                     pixels[ch] = np.array(arr)
                 return pixels
 
