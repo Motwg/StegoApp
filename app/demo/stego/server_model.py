@@ -21,7 +21,8 @@ class ServerModel(metaclass=Singleton):
 
     def __call__(self, img):
         assert isinstance(img, Image.Image)
-        img = np.array(img.crop((0, 0, 256, 256)))[None, :, :, :]
+        img = img.crop((0, 0, 256, 256))
+        img = np.asarray(img)[None, :, :, :]
         img = np.transpose(img, axes=[3, 1, 2, 0])
         predictions = self.model.predict(img)
         return [(np.argmax(p), np.around(max(p) * 100, decimals=2)) for p in predictions]

@@ -98,9 +98,10 @@ def embed_watermark():
         watermark = str_to_binary(settings['watermark'])
         cb = current_app.config['progress_cb']
 
-        cb.add_max_value(1)
+        cb.add_max_value(2)
         embedder = Embedder(**settings)
         new_img = embedder(img, watermark, cb=cb)
+        cb.add_current_value(1)
         enc_img = encode_img(new_img)
         cb.add_current_value(1)
 
